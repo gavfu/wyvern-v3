@@ -119,6 +119,10 @@ contract ProxyRegistry is Ownable, ProxyRegistryInterface {
         returns (OwnableDelegateProxy proxy)
     {
         require(proxies[user] == OwnableDelegateProxy(0), "User already has a proxy");
+        /**
+        所有用户的 OwnableDelegateProxy，都指向同一个 OwnableDelegeProxy (delegateProxyImplementation)，
+        调用时使用 delegatecall，相关的状态变更保存在各自的 OwnableDelegateProxy 中
+         */
         proxy = new OwnableDelegateProxy(user, delegateProxyImplementation, abi.encodeWithSignature("initialize(address,address)", user, address(this)));
         proxies[user] = proxy;
         return proxy;

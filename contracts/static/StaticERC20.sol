@@ -19,6 +19,10 @@ contract StaticERC20 {
         public
         pure
     {
+        /**
+        abi.decode(bytes memory encodedData, (...)) returns (...): 
+            ABI-decodes the given data, while the types are given in parentheses as second argument.
+         */
         // Decode extradata
         (address token, uint amount) = abi.decode(extra, (address, uint));
 
@@ -26,6 +30,15 @@ contract StaticERC20 {
         require(addresses[2] == token);
         // Call type = call
         require(howToCall == AuthenticatedProxy.HowToCall.Call);
+
+        /**
+        abi.encodeWithSignature(string memory signature, ...) returns (bytes memory): 
+            Equivalent to abi.encodeWithSelector(bytes4(keccak256(bytes(signature))), ...)
+        abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory):
+            ABI-encodes the given arguments starting from the second and prepends the given four-byte selector
+        These encoding functions can be used to craft data for external function calls without actually calling an external function.
+        Furthermore, keccak256(abi.encodePacked(a, b)) is a way to compute the hash of structured data (although be aware that it is possible to craft a “hash collision” using different function parameter types)    
+         */
         // Assert calldata
         require(ArrayUtils.arrayEq(data, abi.encodeWithSignature("transferFrom(address,address,uint256)", addresses[1], addresses[4], amount)));
     }

@@ -32,6 +32,11 @@ contract TokenRecipient {
     /**
      * @dev Receive Ether and generate a log event
      */
+     /**
+     https://docs.soliditylang.org/en/v0.7.5/contracts.html#receive-ether-function
+     https://docs.soliditylang.org/en/v0.7.5/contracts.html#fallback-function
+     通过 payable fallback function，为每个用户的 AuthenticatedProxy 添加接收 ETH 转帐的功能
+      */
     fallback () payable external {
         emit ReceivedEther(msg.sender, msg.value);
     }
